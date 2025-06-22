@@ -10,6 +10,9 @@ REQUESTS_COUNTER = Counter(name="prediction_requests_total",
 RESPONSE_TIME_SUMMARY = Summary(name="prediction_request_duration_seconds",
                   documentation="Duration of prediction requests in seconds")
 
+TOKENS_COUNTER = Counter(name="prediction_tokens_total",
+                  documentation="Total number of tokens processed in prediction requests")
+
 
 # start the prometheus server
 start_http_server(8000)
@@ -28,3 +31,11 @@ def predict(delay):
         "sentiment": result_choice
     }
     
+def process_tokens(tokens):
+    """Process tokens and update the token counter"""
+    number_of_tokens = len(tokens)
+    # Increment the tokens counter
+    TOKENS_COUNTER.inc(number_of_tokens)
+    # Simulate processing time
+    time.sleep(0.1)  # Simulating a short delay for processing tokens
+    return number_of_tokens
